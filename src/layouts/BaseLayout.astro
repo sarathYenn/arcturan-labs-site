@@ -1,0 +1,194 @@
+---
+/**
+ * Shell for every page: head, ink tokens, nav, footer.
+ *
+ * Design language is manga-page grammar — panels, gutters, halftone, hard ink
+ * rules — taken from what the studio builds rather than invented. Both themes
+ * are first-class: manga is ink on paper, so light is arguably the truer mode,
+ * and the tokens flip rather than the components.
+ *
+ * Styling is scoped `<style>` per component with tokens on :root, matching the
+ * blog repo's convention so the two sites can share decisions.
+ */
+import { studio } from '../data/site';
+
+interface Props {
+  title?: string;
+  description?: string;
+}
+
+const {
+  title = studio.name,
+  description = studio.intro,
+} = Astro.props;
+---
+
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>{title}</title>
+    <meta name="description" content={description} />
+    <link rel="canonical" href={new URL(Astro.url.pathname, Astro.site)} />
+    <meta property="og:title" content={title} />
+    <meta property="og:description" content={description} />
+    <meta property="og:type" content="website" />
+    <meta name="theme-color" content="#E5484D" />
+    <link
+      rel="icon"
+      href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' fill='%23E5484D'/%3E%3Ctext x='16' y='23' font-family='system-ui,sans-serif' font-size='20' font-weight='900' fill='white' text-anchor='middle'%3EA%3C/text%3E%3C/svg%3E"
+    />
+    <style is:global>
+      /* Light is the default: ink on paper. */
+      :root {
+        --ground: #fbfaf8;
+        --panel: #ffffff;
+        --ink: #141118;         /* rules, borders, primary text */
+        --inverse: #f3f0eb;     /* text on ink-filled surfaces */
+        --muted: #5d5766;
+        --hair: #dcd7d0;
+        --accent: #d93b3f;
+        --shadow: #141118;
+        --hatch: rgba(20, 17, 24, 0.1);
+      }
+      @media (prefers-color-scheme: dark) {
+        :root {
+          --ground: #121016;
+          --panel: #1a1721;
+          --ink: #f3f0eb;
+          --inverse: #141118;
+          --muted: #9c94a8;
+          --hair: #2c2733;
+          --accent: #e5484d;
+          --shadow: #000000;
+          --hatch: rgba(243, 240, 235, 0.09);
+        }
+      }
+
+      * { box-sizing: border-box; margin: 0; padding: 0; }
+
+      body {
+        background: var(--ground);
+        color: var(--ink);
+        font-family: ui-sans-serif, -apple-system, BlinkMacSystemFont, 'SF Pro Text',
+          system-ui, sans-serif;
+        font-size: 16px;
+        line-height: 1.65;
+        -webkit-font-smoothing: antialiased;
+      }
+
+      /* Panel numbers, section labels, anything annotative. */
+      .mono {
+        font-family: ui-monospace, 'SF Mono', Menlo, monospace;
+        font-variant-numeric: tabular-nums;
+      }
+
+      a { color: inherit; text-decoration: none; }
+
+      :focus-visible {
+        outline: 2px solid var(--accent);
+        outline-offset: 3px;
+      }
+
+      @media (prefers-reduced-motion: reduce) {
+        *, *::before, *::after { transition: none !important; animation: none !important; }
+      }
+    </style>
+  </head>
+
+  <body>
+    <div class="shell">
+      <nav>
+        <a href="/" class="mark">
+          <span class="glyph" aria-hidden="true">A</span>
+          <span>{studio.name}</span>
+        </a>
+        <div class="links">
+          <a href="#work">Work</a>
+          <a href="#writing">Writing</a>
+          <a href={`mailto:${studio.email}`}>Contact</a>
+        </div>
+      </nav>
+
+      <slot />
+
+      <footer>
+        <span>{studio.legalName} · {studio.location}</span>
+        <span class="foot-links">
+          <a href={`mailto:${studio.email}`}>{studio.email}</a>
+          <a href={studio.blogUrl}>blog.arcturanlabs.com</a>
+        </span>
+      </footer>
+    </div>
+  </body>
+</html>
+
+<style>
+  .shell {
+    max-width: 1080px;
+    margin: 0 auto;
+    border-left: 2px solid var(--ink);
+    border-right: 2px solid var(--ink);
+    background: var(--panel);
+    min-height: 100vh;
+  }
+
+  nav {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 16px;
+    padding: 16px 26px;
+    border-bottom: 2px solid var(--ink);
+  }
+
+  .mark {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    font-weight: 800;
+    font-size: 16px;
+    letter-spacing: -0.02em;
+  }
+
+  .glyph {
+    width: 25px;
+    height: 25px;
+    background: var(--accent);
+    border: 2px solid var(--ink);
+    display: grid;
+    place-items: center;
+    color: #fff;
+    font-size: 12.5px;
+    font-weight: 900;
+    line-height: 1;
+  }
+
+  .links {
+    display: flex;
+    gap: 22px;
+    font-size: 13.5px;
+    color: var(--muted);
+  }
+  .links a:hover { color: var(--ink); }
+
+  footer {
+    display: flex;
+    justify-content: space-between;
+    flex-wrap: wrap;
+    gap: 10px;
+    padding: 22px 26px;
+    border-top: 2px solid var(--ink);
+    font-size: 12.5px;
+    color: var(--muted);
+  }
+  .foot-links { display: flex; gap: 18px; flex-wrap: wrap; }
+  .foot-links a:hover { color: var(--ink); }
+
+  @media (max-width: 720px) {
+    .shell { border-left: none; border-right: none; }
+    nav { padding: 14px 18px; }
+    footer { padding: 18px; }
+  }
+</style>
