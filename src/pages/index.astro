@@ -33,10 +33,16 @@ const statusLine =
 
     {shipped.map((p) => (
       <article class="splash">
-        <div class="art" aria-hidden="true">
-          <div class="tone"></div>
-          <div class="frames"><i></i><i></i><i></i></div>
-        </div>
+        {p.image ? (
+          <div class="art has-image">
+            <img src={p.image.src} alt={p.image.alt} loading="lazy" decoding="async" />
+          </div>
+        ) : (
+          <div class="art" aria-hidden="true">
+            <div class="tone"></div>
+            <div class="frames"><i></i><i></i><i></i></div>
+          </div>
+        )}
         <div class="body">
           <h3>{p.name}</h3>
           <p class="dek">{p.tagline}</p>
@@ -172,6 +178,21 @@ const statusLine =
   .splash + .splash { margin-top: 28px; }
 
   .art { position: relative; min-height: 230px; background: var(--accent); overflow: hidden; }
+
+  /* With real output, the accent becomes the gutter and the artwork becomes the
+     panel — the same relationship a printed page has. Keeping a coloured gutter
+     rather than letting the image bleed is what stops it reading as a pasted
+     screenshot. */
+  .art.has-image { padding: 12px; display: flex; }
+  .art.has-image img {
+    width: 100%;
+    height: 100%;
+    min-height: 206px;
+    object-fit: cover;
+    object-position: center 38%;
+    display: block;
+    border: 2px solid #141118;
+  }
   .art .tone {
     position: absolute;
     inset: 0;
