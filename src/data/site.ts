@@ -25,6 +25,13 @@ export type Product = {
   name: string;
   tagline: string;
   url: string;
+  /**
+   * Real output from the product, shown in the splash panel. Path under
+   * `public/`. Omit and the panel falls back to an abstract frame grid — which
+   * is honest for something that has nothing to show yet, and much weaker for
+   * something that does.
+   */
+  image?: { src: string; alt: string };
   /** Short label rows shown under the tagline. Keep to three; more reads as a spec sheet. */
   facts: { label: string; value: string }[];
 };
@@ -35,6 +42,10 @@ export const shipped: Product[] = [
     name: 'genkos.app',
     tagline: 'Turn any story into manga — panel by panel.',
     url: 'https://genkos.app',
+    image: {
+      src: '/samples/genkos-panel.jpg',
+      alt: 'A manga panel generated on genkos.app: two characters at a wooden table with a basket of fruit, drawn in cel-shaded anime style.',
+    },
     facts: [
       { label: 'Live', value: 'Public, taking payments' },
       { label: 'Stack', value: 'FastAPI · Next.js · Postgres · Replicate' },
