@@ -177,9 +177,11 @@ const statusLine =
   }
   .splash + .splash { margin-top: 28px; }
 
-  .art { position: relative; min-height: 230px; background: var(--accent); overflow: hidden; }
+  /* The navy, not the cyan: this is the largest colour field on the page, and
+     at that size the cyan competes with the artwork it is supposed to frame. */
+  .art { position: relative; min-height: 230px; background: var(--deep); overflow: hidden; }
 
-  /* With real output, the accent becomes the gutter and the artwork becomes the
+  /* With real output, the navy becomes the gutter and the artwork becomes the
      panel — the same relationship a printed page has. Keeping a coloured gutter
      rather than letting the image bleed is what stops it reading as a pasted
      screenshot. */

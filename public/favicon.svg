@@ -1,0 +1,13 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 32 32" role="img" aria-label="Arcturan Labs">
+  <!--
+    The full mark (an A behind an orbiting atom) turns to mush below ~44px, so
+    the favicon is a reduction of it rather than a copy: the A as a solid
+    triangle, its counter punched out to stand in for the nucleus. The orbit
+    ring was tried here and cut the triangle into something that read as an eye
+    at 16px. Navy ground because navy geometry on a transparent field
+    disappears against a dark browser tab.
+  -->
+  <rect width="32" height="32" rx="6" fill="#12305a"/>
+  <path d="M16 6.5 27 26H5Z" fill="#2ec4e0"/>
+  <circle cx="16" cy="19.5" r="3.4" fill="#12305a"/>
+</svg>
