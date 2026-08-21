@@ -34,11 +34,10 @@ const {
     <meta property="og:title" content={title} />
     <meta property="og:description" content={description} />
     <meta property="og:type" content="website" />
-    <meta name="theme-color" content="#E5484D" />
-    <link
-      rel="icon"
-      href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' fill='%23E5484D'/%3E%3Ctext x='16' y='23' font-family='system-ui,sans-serif' font-size='20' font-weight='900' fill='white' text-anchor='middle'%3EA%3C/text%3E%3C/svg%3E"
-    />
+    <meta property="og:image" content={new URL('/og-cover.jpg', Astro.site)} />
+    <meta name="theme-color" content="#12305a" />
+    <link rel="icon" href="/favicon.svg" type="image/svg+xml" />
+    <link rel="apple-touch-icon" href="/apple-touch-icon.png" />
     <style is:global>
       /* Light is the default: ink on paper. */
       :root {
@@ -48,7 +47,11 @@ const {
         --inverse: #f3f0eb;     /* text on ink-filled surfaces */
         --muted: #5d5766;
         --hair: #dcd7d0;
-        --accent: #d93b3f;
+        /* Both taken off the logo. --accent is darkened from the mark's cyan so
+           it clears 4.5:1 on paper — it is used at 10–11px, where the mark's own
+           value would fail. */
+        --accent: #0d7f9e;
+        --deep: #12305a;
         --shadow: #141118;
         --hatch: rgba(20, 17, 24, 0.1);
       }
@@ -60,7 +63,11 @@ const {
           --inverse: #141118;
           --muted: #9c94a8;
           --hair: #2c2733;
-          --accent: #e5484d;
+          /* Ink-on-paper inverts, so the pair does too: the cyan brightens back
+             toward the mark's own value, and the navy lifts off the ground it
+             would otherwise sink into. */
+          --accent: #2ec4e0;
+          --deep: #1b4670;
           --shadow: #000000;
           --hatch: rgba(243, 240, 235, 0.09);
         }
@@ -101,7 +108,7 @@ const {
     <div class="shell">
       <nav>
         <a href="/" class="mark">
-          <span class="glyph" aria-hidden="true">A</span>
+          <img class="glyph" src="/logo.png" alt="" width="40" height="40" />
           <span>{studio.name}</span>
         </a>
         <div class="links">
@@ -144,6 +151,7 @@ const {
   }
 
   .mark {
+    position: relative;
     display: flex;
     align-items: center;
     gap: 10px;
@@ -152,17 +160,15 @@ const {
     letter-spacing: -0.02em;
   }
 
+  /* 40px, not the 25px the old lettered glyph used: the orbit rings and the
+     molecular cluster collapse into noise below ~40, and the mark is served at
+     128px so it stays sharp on dense displays. It sits unframed — a 2px rule
+     around a mark that already has its own silhouette reads as a sticker. */
   .glyph {
-    width: 25px;
-    height: 25px;
-    background: var(--accent);
-    border: 2px solid var(--ink);
-    display: grid;
-    place-items: center;
-    color: #fff;
-    font-size: 12.5px;
-    font-weight: 900;
-    line-height: 1;
+    width: 40px;
+    height: 40px;
+    display: block;
+    flex: none;
   }
 
   .links {
@@ -190,5 +196,21 @@ const {
     .shell { border-left: none; border-right: none; }
     nav { padding: 14px 18px; }
     footer { padding: 18px; }
+  }
+
+  /* Below this the wordmark and three links cannot share a row without the
+     wordmark wrapping and "Contact" running off the edge. The mark carries the
+     identity on its own here; the name stays in the accessibility tree so the
+     home link keeps a usable name. */
+  @media (max-width: 430px) {
+    .mark span {
+      position: absolute;
+      width: 1px;
+      height: 1px;
+      overflow: hidden;
+      clip-path: inset(50%);
+      white-space: nowrap;
+    }
+    .links { gap: 16px; }
   }
 </style>
