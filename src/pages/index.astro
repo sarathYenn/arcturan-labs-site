@@ -105,9 +105,14 @@ const statusLine =
 
 <style>
   /* ── hero ──────────────────────────────────────────────────────────────── */
+  /* Headline then intro, stacked, both running the full page width. The
+     headline is sized in `cqw` rather than `vw` so it tracks the panel it sits
+     in: the shell caps at 1080px, so past that a vw size keeps growing while
+     the box it has to fill does not. */
   .hero {
     position: relative;
-    padding: 64px 26px 52px;
+    container-type: inline-size;
+    padding: 60px 26px 52px;
     border-bottom: 2px solid var(--ink);
     overflow: hidden;
   }
@@ -124,27 +129,25 @@ const statusLine =
   }
   .hero h1 {
     position: relative;
-    margin: 0 0 18px;
-    font-size: clamp(34px, 6.4vw, 62px);
-    line-height: 1.02;
-    letter-spacing: -0.035em;
+    margin: 0 0 22px;
+    font-size: 8.6cqw;
+    line-height: 1.0;
+    letter-spacing: -0.042em;
     font-weight: 850;
-    max-width: 15ch;
     text-wrap: balance;
   }
   .hero .sub {
     position: relative;
     margin: 0;
     color: var(--muted);
-    max-width: 52ch;
-    font-size: 16.5px;
+    font-size: clamp(16.5px, 1.9cqw, 21px);
   }
   .status {
     position: relative;
     display: inline-flex;
     align-items: center;
     gap: 8px;
-    margin-top: 26px;
+    margin-top: 24px;
     font-size: 11px;
     letter-spacing: 0.1em;
     text-transform: uppercase;
